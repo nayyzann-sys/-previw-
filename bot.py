@@ -129,7 +129,7 @@ async def delete_message_job(context: ContextTypes.DEFAULT_TYPE):
 
 # ----------------- Main Execution -----------------
 if __name__ == '__main__':
-    TOKEN = "8935742099:AAH9U84SCqLairPP7NEMoHGnILDtsJkS4EQ"
+    TOKEN = os.getenv("BOT_TOKEN")
     
     application = ApplicationBuilder().token(TOKEN).build()
     
@@ -138,4 +138,3 @@ if __name__ == '__main__':
     
     print("Bot is running...")
     application.run_polling(drop_pending_updates=True)
-            
