@@ -42,18 +42,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 [InlineKeyboardButton("အပိုင်း (၄) - Free", callback_data="m1_ep4")],
                 [InlineKeyboardButton("အပိုင်း (၅) - Free", callback_data="m1_ep5")],
                 [InlineKeyboardButton("အပိုင်း (၆) - Free", callback_data="m1_ep6")],
-                [InlineKeyboardButton("အပိုင်း (၇) နှင့်အထက် - VIP", callback_data="vip_locked")]
+                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန်", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             await query.message.reply_photo(
                 photo="AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E",
                 caption=(
-                    "📌 **The Flash (2014) season 1 to 9**\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
+                    "📌 **The Flash (2014)**\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၆) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
-                    "• မန်ဘာကြေး - **တစ်ကားလျှင် ၂,၀၀၀ ကျပ်**\n"
-                    "• အပိုင်းအသစ်များနှင့် ကျန်အပိုင်းများကို ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n\n"
+                    "• မန်ဘာကြေး - **တစ်ကားလျှင် ၂,၀၀၀ ကျပ်**\n\n"
                     "အောက်ပါ အပိုင်းများကို ရွေးချယ်ပါ -"
                 ),
                 reply_markup=reply_markup,
@@ -69,15 +68,15 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 [InlineKeyboardButton("အပိုင်း (၄) - Free", callback_data="m2_ep4")],
                 [InlineKeyboardButton("အပိုင်း (၅) - Free", callback_data="m2_ep5")],
                 [InlineKeyboardButton("အပိုင်း (၆) - Free", callback_data="m2_ep6")],
-                [InlineKeyboardButton("အပိုင်း (၇) နှင့်အထက် - VIP", callback_data="vip_locked")]
+                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန်", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             await query.message.reply_photo(
                 photo="AgACAgUAAxkBAAEguktqYGtKcwc5Lz0a-uvM011zR6ouQQACrBJrG-62aFXF-kV2rfK7_gEAAwIAA3cAAz0E",
                 caption=(
-                    "📌 **Lucifer (2016) season 1 to 6**\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
+                    "📌 **Lucifer (2016)**\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၆) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• မန်ဘာကြေး - **တစ်ကားလျှင် ၂,၀၀၀ ကျပ်**\n\n"
                     "အောက်ပါ အပိုင်းများကို ရွေးချယ်ပါ -"
@@ -130,7 +129,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif data == "m1_ep6":
             sent_msg = await context.bot.send_video(
                 chat_id=query.message.chat_id,
-                video="အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ",
+                video="BAACAgUAAxkBAAEgulfqYGw4w2Z9_1g885Oau3MBQAZ5dgACGxkAAlnEgFQsmJuyY9nHzD0E",
                 caption="🎬 The Flash (2014) - အပိုင်း (၆)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။"
             )
             schedule_deletion(context, sent_msg)
@@ -183,22 +182,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 caption="🎬 Lucifer (2016) - အပိုင်း (၆)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။"
             )
             schedule_deletion(context, sent_msg)
-
-        # ----------------- VIP အပိုင်းများ -----------------
-        elif data == "vip_locked":
-            keyboard = [
-                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန်", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
-            ]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            
-            await query.message.reply_text(
-                f"🔒 **VIP အပိုင်းများ (အပိုင်း ၇ နှင့်အထက်)**\n\n"
-                f"⚠️ ဤ အပိုင်းများကို ကြည့်ရှုရန်အတွက် VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
-                f"💰 မန်ဘာကြေး - **တစ်ကားလျှင် ၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
-                f"မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ Owner ထံသို့ ဆက်သွယ်နိုင်ပါသည် -",
-                reply_markup=reply_markup,
-                parse_mode="Markdown"
-            )
             
     except Exception as e:
         await query.message.reply_text(f"⚠️ Error: {str(e)}")
