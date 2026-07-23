@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *' # ၅ မိနစ် တစ်ကြိမ် အလိုအလျောက် run ပေးပါမည်
+    - cron: '*/5 * * * *'
 
 jobs:
   build:
@@ -28,4 +28,3 @@ jobs:
     - name: Run Bot
       run: |
         python bot.py
-        
