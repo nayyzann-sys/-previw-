@@ -10,17 +10,24 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
+# Bot စတင်ချိန်တွင် ပေါ်မည့် ပုံ (Photo URL သို့မဟုတ် Telegram File ID ထည့်ရန်)
+WELCOME_PHOTO_URL = "https://via.placeholder.com/600x400.png?text=Welcome+To+Movie+Bot"
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")]
+        [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")],
+        [InlineKeyboardButton("🎬 ဇာတ်ကားအသစ် အမည် (Season 1)", callback_data="m2")] # <--- ဇာတ်ကားအသစ်
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Start နှိပ်လိုက်ရင် ပေါ်မယ့် မက်ဆေ့ချ် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်၊ ပျက်သွားရင် /start ပြန်နှိပ်ပြီး ယူလို့ရမယ်)
-    sent_msg = await update.message.reply_text(
-        "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-        "အောက်ပါ ဇာတ်ကားကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-        "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*",
+    # Start နှိပ်ရင် ပုံနှင့်အတူ မက်ဆေ့ချ် ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
+    sent_msg = await update.message.reply_photo(
+        photo=WELCOME_PHOTO_URL,
+        caption=(
+            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
+            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
+            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
+        ),
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
@@ -33,33 +40,90 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            # ဇာတ်ကား ခေါင်းစဉ်နှင့် အချက်အလက်စာသား ပို့မည်
-            await query.message.reply_text(
-                "📌 **The Flash (2014)**\n"
-                "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
-                "• ပို့ပေးသော ဗီဒီယိုများသည် **(၆) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
-                "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ရှုချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။",
+            # ဇာတ်ကား (၁) အတွက် ပုံနှင့် အချက်အလက်များ (Season နှင့် အပိုင်း (၆) ပိုင်းစာ)
+            movie_photo_1 = "The_Flash_Poster_File_ID_သို့မဟုတ်_URL" # ဇာတ်ကားပုံ နေရာ
+            await context.bot.send_photo(
+                chat_id=query.message.chat_id,
+                photo=movie_photo_1,
+                caption=(
+                    "📌 **The Flash (2014)**\n"
+                    "📺 **Season:** 1\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
+                    "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
+                    "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
+                ),
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့ပေးမည် (၆ နာရီကြာရင် ပျက်မယ်)
-            msg1 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၁ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၁)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg1)
+            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့ပေးမည် (၁၂ နာရီကြာရင် ပျက်မယ်)
+            videos_m1 = [
+                ("အပိုင်း ၁ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၁)"),
+                ("အပိုင်း ၂ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၂)"),
+                ("အပိုင်း ၃ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၃)"),
+                ("အပိုင်း ၄ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၄)"),
+                ("အပိုင်း ၅ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၅)"),
+                ("အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၆)"),
+            ]
 
-            msg2 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၂ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၂)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg2)
+            for vid, cap in videos_m1:
+                msg = await context.bot.send_video(
+                    chat_id=query.message.chat_id, 
+                    video=vid, 
+                    caption=f"{cap}\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)"
+                )
+                schedule_deletion(context, msg)
 
-            msg3 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၃ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၃)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg3)
+            # အပိုင်း (၇) နှင့်အထက် အတွက် မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ်
+            keyboard = [
+                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text=(
+                    "🔒 **VIP အပိုင်းများ (အပိုင်း ၇ နှင့်အထက်)**\n\n"
+                    "⚠️ ဤ အပိုင်းများကို ကြည့်ရှုရန်အတွက် VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
+                    "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
+                    "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ Owner ထံသို့ ဆက်သွယ်နိုင်ပါသည် -"
+                ),
+                reply_markup=reply_markup,
+                parse_mode="Markdown"
+            )
 
-            msg4 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၄ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၄)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg4)
+        elif data == "m2":
+            # ဇာတ်ကား အသစ် (၂) အတွက် ပုံနှင့် အချက်အလက်များ (Season နှင့် အပိုင်း (၆) ပိုင်းစာ)
+            movie_photo_2 = "New_Movie_Poster_File_ID_သို့မဟုတ်_URL" # ဇာတ်ကားပုံ နေရာ
+            await context.bot.send_photo(
+                chat_id=query.message.chat_id,
+                photo=movie_photo_2,
+                caption=(
+                    "📌 **ဇာတ်ကားအသစ် အမည်**\n"
+                    "📺 **Season:** 1\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
+                    "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
+                    "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
+                ),
+                parse_mode="Markdown"
+            )
 
-            msg5 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၅ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၅)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg5)
+            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့ပေးမည် (၁၂ နာရီကြာရင် ပျက်မယ်)
+            videos_m2 = [
+                ("ဇာတ်ကားအသစ် အပိုင်း ၁ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၁)"),
+                ("ဇာတ်ကားအသစ် အပိုင်း ၂ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၂)"),
+                ("ဇာတ်ကားအသစ် အပိုင်း ၃ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၃)"),
+                ("ဇာတ်ကားအသစ် အပိုင်း ၄ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၄)"),
+                ("ဇာတ်ကားအသစ် အပိုင်း ၅ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၅)"),
+                ("ဇာတ်ကားအသစ် အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၆)"),
+            ]
 
-            msg6 = await context.bot.send_video(chat_id=query.message.chat_id, video="အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", caption="🎬 The Flash (2014) - အပိုင်း (၆)\n\n⚠️ ဤဗီဒီယိုသည် ၆ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)")
-            schedule_deletion(context, msg6)
+            for vid, cap in videos_m2:
+                msg = await context.bot.send_video(
+                    chat_id=query.message.chat_id, 
+                    video=vid, 
+                    caption=f"{cap}\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။ (အချိန်မရွေး /start ပြန်နှိပ်ပြီး ကြည့်နိုင်သည်)"
+                )
+                schedule_deletion(context, msg)
 
             # အပိုင်း (၇) နှင့်အထက် အတွက် မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ်
             keyboard = [
@@ -92,10 +156,10 @@ def schedule_start_deletion(context, sent_msg):
             pass
     context.application.create_task(delete_start_msg())
 
-# ၆ နာရီကြာရင် ဗီဒီယိုဖျက်ပေးမည့် ဖန်ရှင်
+# ၁၂ နာရီကြာရင် ဗီဒီယိုဖျက်ပေးမည့် ဖန်ရှင်
 def schedule_deletion(context, sent_msg):
     async def delete_msg():
-        await asyncio.sleep(21600)  # 6 hours = 21600 seconds
+        await asyncio.sleep(43200)  # 12 hours = 43200 seconds
         try:
             await context.bot.delete_message(chat_id=sent_msg.chat_id, message_id=sent_msg.message_id)
         except Exception:
