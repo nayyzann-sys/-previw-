@@ -4,6 +4,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *' # ၅ မိနစ် တစ်ကြိမ် အလိုအလျောက် run ပေးပါမည်
 
 jobs:
   build:
