@@ -9,24 +9,17 @@ logging.basicConfig(
 )
 
 CONTACT_USERNAME = "naywww01"
-
-# Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID
 CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
-        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
+        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     sent_msg = await update.message.reply_photo(
         photo=CHANNEL_PHOTO_ID,
-        caption=(
-            "✨ *ကြိုဆိုပါတယ်ခင်ဗျာ!*\n"
-            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။*"
-        ),
+        caption="✨ *ကြိုဆိုပါတယ်ခင်ဗျာ!*\nအောက်ပါဇာတ်ကားကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -",
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
@@ -44,28 +37,29 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo=movie_poster_1,
-                caption=(
-                    "📌 *The Flash (2014)*\n"
-                    "📺 *Season 1 to 9*\n\n"
-                    "• ပို့ပေးသော ဗီဒီယိုများသည် *(၁၂) နာရီကြာပါက* အလိုအလျောက် ပျက်သွားပါမည်။\n"
-                    "• ဗီဒီယိုများ ပျက်သွားပါက /start ကို ပြန်နှိပ်၍ အသစ်ပြန်ယူနိုင်ပါသည်။"
-                ),
+                caption="📌 *The Flash (2014)*\n📺 *Season 1 to 9*\n\nဗီဒီယိုများကို အောက်တွင် ပို့ပေးလိုက်ပါပြီ -",
                 parse_mode="Markdown"
             )
 
+            # အပိုင်း ၆ ပိုင်းသာ ထည့်ထားသည်
             videos_m1 = [
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၄)"),
+                ("BQACAgeUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m1:
                 msg = await context.bot.send_video(
                     chat_id=query.message.chat_id, 
                     video=vid, 
-                    caption=f"{cap}\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။"
+                    caption=f"{cap}\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။"
                 )
                 schedule_deletion(context, msg)
 
+            # အပိုင်း ၇ နှင့်အထက်အတွက် မန်ဘာဝင်ရန် ခလုတ်
             keyboard = [
                 [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME}")]
             ]
@@ -74,52 +68,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=query.message.chat_id,
                 text=(
-                    "🔒 *ကျန်အပိုင်းများ ကြည့်ရှုရန်*\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
-                    "💰 မန်ဘာကြေး - *၂,၀၀၀ ကျပ်* ဖြစ်ပါသည်။"
-                ),
-                reply_markup=reply_markup,
-                parse_mode="Markdown"
-            )
-
-        elif data == "m2":
-            movie_poster_2 = "AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E"
-            
-            await context.bot.send_photo(
-                chat_id=query.message.chat_id,
-                photo=movie_poster_2,
-                caption=(
-                    "📌 *Lucifer (2016)*\n"
-                    "📺 *Season 1 to 6*\n\n"
-                    "• ပို့ပေးသော ဗီဒီယိုများသည် *(၁၂) နာရီကြာပါက* အလိုအလျောက် ပျက်သွားပါမည်။"
-                ),
-                parse_mode="Markdown"
-            )
-
-            videos_m2 = [
-                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၁)"),
-                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၂)"),
-            ]
-
-            for vid, cap in videos_m2:
-                msg = await context.bot.send_video(
-                    chat_id=query.message.chat_id, 
-                    video=vid, 
-                    caption=f"{cap}\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။"
-                )
-                schedule_deletion(context, msg)
-
-            keyboard = [
-                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME}")]
-            ]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            
-            await context.bot.send_message(
-                chat_id=query.message.chat_id,
-                text=(
-                    "🔒 *ကျန်အပိုင်းများ ကြည့်ရှုရန်*\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
-                    "💰 မန်ဘာကြေး - *၂,၀၀၀ ကျပ်* ဖြစ်ပါသည်။"
+                    "🔒 *အပိုင်း ၇ နှင့်အထက် ကြည့်ရှုရန်*\n\n"
+                    "⚠️ အပိုင်း ၇ နှင့်အထက် ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
+                    "💰 မန်ဘာကြေး - *၂,၀၀0 ကျပ်* ဖြစ်ပါသည်။\n\n"
+                    "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ ဆက်သွယ်နိုင်ပါသည် -"
                 ),
                 reply_markup=reply_markup,
                 parse_mode="Markdown"
@@ -153,4 +105,4 @@ if __name__ == '__main__':
     application.add_handler(CallbackQueryHandler(button_handler))
     print("Bot is running...")
     application.run_polling(drop_pending_updates=True)
-        
+            
