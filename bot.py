@@ -10,9 +10,6 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
-# 1. Start နှိပ်ရင် ပေါ်မည့် ကြိုဆိုရေးပိုစတာပုံ (Photo URL သို့မဟုတ် Telegram File ID ထည့်ရန်)
-WELCOME_POSTER_URL = "https://via.placeholder.com/600x400.png?text=Welcome+Movie+Bot+Poster"
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")],
@@ -20,14 +17,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Start နှိပ်ရင် ပိုစတာပုံနဲ့အတူ ခလုတ်တွေပါ ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
-    sent_msg = await update.message.reply_photo(
-        photo=WELCOME_POSTER_URL,
-        caption=(
-            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
-        ),
+    sent_msg = await update.message.reply_text(
+        "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
+        "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
+        "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*",
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
@@ -40,14 +33,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            # The Flash ဇာတ်ကား ပိုစတာပုံ (Photo URL သို့မဟုတ် Telegram File ID ထည့်ရန်)
-            movie_poster_1 = "https://via.placeholder.com/600x400.png?text=The+Flash+Poster"
-            
-            # ဇာတ်ကား ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
-            await context.bot.send_photo(
+            await context.bot.send_message(
                 chat_id=query.message.chat_id,
-                photo=movie_poster_1,
-                caption=(
+                text=(
                     "📌 **The Flash (2014)**\n"
                     "📺 **Season:** 1\n"
                     "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n\n"
@@ -57,7 +45,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့မည်
+            # (မှတ်ချက် - အောက်ပါ BQAC... နေရာများတွင် သင်၏ တကယ့် Telegram ဗီဒီယို File ID များကို ထည့်ပေးပါ)
             videos_m1 = [
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
@@ -75,7 +63,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 schedule_deletion(context, msg)
 
-            # အပိုင်း (၇) နှင့်အထက် အတွက် မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ်
             keyboard = [
                 [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
@@ -94,14 +81,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            # ဇာတ်ကားအသစ် ပိုစတာပုံ (Photo URL သို့မဟုတ် Telegram File ID ထည့်ရန်)
-            movie_poster_2 = "https://via.placeholder.com/600x400.png?text=New+Movie+Poster"
-            
-            # ဇာတ်ကားအသစ် ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
-            await context.bot.send_photo(
+            await context.bot.send_message(
                 chat_id=query.message.chat_id,
-                photo=movie_poster_2,
-                caption=(
+                text=(
                     "📌 **ဇာတ်ကားအသစ် အမည်**\n"
                     "📺 **Season:** 1\n"
                     "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n\n"
@@ -111,7 +93,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့မည်
             videos_m2 = [
                 ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၁)"),
                 ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၂)"),
@@ -129,7 +110,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 schedule_deletion(context, msg)
 
-            # အပိုင်း (၇) နှင့်အထက် အတွက် မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ်
             keyboard = [
                 [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
@@ -150,20 +130,18 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await query.message.reply_text(f"⚠️ Error: {str(e)}")
 
-# ၁၀ မိနစ်ကြာရင် start မက်ဆေ့ချ်ကို ဖျက်မည့် ဖန်ရှင်
 def schedule_start_deletion(context, sent_msg):
     async def delete_start_msg():
-        await asyncio.sleep(600)  # 10 minutes = 600 seconds
+        await asyncio.sleep(600)
         try:
             await context.bot.delete_message(chat_id=sent_msg.chat_id, message_id=sent_msg.message_id)
         except Exception:
             pass
     context.application.create_task(delete_start_msg())
 
-# ၁၂ နာရီကြာရင် ဗီဒီယိုဖျက်ပေးမည့် ဖန်ရှင်
 def schedule_deletion(context, sent_msg):
     async def delete_msg():
-        await asyncio.sleep(43200)  # 12 hours = 43200 seconds
+        await asyncio.sleep(43200)
         try:
             await context.bot.delete_message(chat_id=sent_msg.chat_id, message_id=sent_msg.message_id)
         except Exception:
