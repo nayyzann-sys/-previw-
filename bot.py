@@ -103,7 +103,7 @@ def schedule_deletion(context, sent_msg):
     context.application.create_task(delete_msg())
 
 if __name__ == '__main__':
-    TOKEN = "8954957485:AAHkVsWNBZDzfxEg1y0u62Vo2hCPYg51RR4"
+    TOKEN = "8935742099:AAF8HZBWbZLu4fh10TufidZ83TlnBHygVbE"
     application = ApplicationBuilder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
