@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 from telegram.ext import ApplicationBuilder, ContextTypes, CallbackQueryHandler, CommandHandler
 
 logging.basicConfig(
@@ -13,10 +13,15 @@ CONTACT_USERNAME = "@naywww01"
 # Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID
 CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
 
+async def set_bot_commands(application):
+    # Telegram တွင် /start ကို Menu ခလုတ်အနေဖြင့် အမြဲပေါ်နေစေရန် သတ်မှတ်ခြင်း
+    commands = [BotCommand("start", "ဇာတ်ကားများ ကြည့်ရန် /start နှိပ်ပါ")]
+    await application.bot.set_my_commands(commands)
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 6", callback_data="m1")],
-        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 9", callback_data="m2")]
+        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
+        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -46,21 +51,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 photo=movie_poster_1,
                 caption=(
                     "📌 **The Flash (2014)**\n"
-                    "📺 **Season 1 to 6**\n\n"
+                    "📺 **Season 1 to 9**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
-            # 👇 [The Flash ဇာတ်ကား - အပိုင်း ၁ မှ ၆ ထိ ဗီဒီယို File ID များကို ဤနေရာတွင် အစားထိုးထည့်ပါ]
             videos_m1 = [
-                ("ဤနေရာတွင်_အပိုင်း၁_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၁)"),
-                ("ဤနေရာတွင်_အပိုင်း၂_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၂)"),
-                ("ဤနေရာတွင်_အပိုင်း၃_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၃)"),
-                ("ဤနေရာတွင်_အပိုင်း၄_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၄)"),
-                ("ဤနေရာတွင်_အပိုင်း၅_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၅)"),
-                ("ဤနေရာတွင်_အပိုင်း၆_File_ID_ထည့်ပါ", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၆)"),
+                ("BAACAgUAAxkBAAEgubBqYFc8zCBAF0q4TGoZwX3xHLSX1AACJB4AAoXLgVRxAUNrR-eL_z0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၁)"),
+                ("BAACAgUAAxkBAAEgullqYGxRVOwVCisP1T14wkwpTeDrAwACJR4AAoXLgVSvbOSV-SlXHD0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၂)"),
+                ("BAACAgUAAxkBAAEguqtqYH1JKVaAc4r3m1D_TSEGpRLRrQACJh4AAoXLgVTZ9Tnit771Sz0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၃)"),
+                ("BAACAgUAAxkBAAEguqxqYH1JCxkERguduVwRuf7HDAb2-gACKx4AAoXLgVRTok4Dly278z0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၄)"),
+                ("BAACAgUAAxkBAAEguq1qYH1JMSEgt1ePqSHRuT58A0J94wAC1yMAAlnEeFT7fXUpjRcYMD0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၅)"),
+                ("BAACAgUAAxkBAAEguq1qYH1JMSEgt1ePqSHRuT58A0J94wAC1yMAAlnEeFT7fXUpjRcYMD0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m1:
@@ -89,29 +93,27 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            # 👇 [Lucifer ဇာတ်ကား ပိုစတာ File ID ထည့်ရန်]
-            movie_poster_2 = "ဤနေရာတွင်_Lucifer_ပိုစတာ_File_ID_ထည့်ပါ"
+            movie_poster_2 = "AgACAgUAAxkBAAEguktqYGtKcwc5Lz0a-uvM011zR6ouQQACrBJrG-62aFXF-kV2rfK7_gEAAwIAA3cAAz0E"
             
             await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo=movie_poster_2,
                 caption=(
                     "📌 **Lucifer (2016)**\n"
-                    "📺 **Season 1 to 9**\n\n"
+                    "📺 **Season 1 to 6**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
-            # 👇 [Lucifer ဇာတ်ကား - အပိုင်း ၁ မှ ၆ ထိ ဗီဒီယို File ID များကို ဤနေရာတွင် အစားထိုးထည့်ပါ]
             videos_m2 = [
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၁_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၁)"),
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၂_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၂)"),
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၃_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၃)"),
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၄_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၄)"),
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၅_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၅)"),
-                ("ဤနေရာတွင်_Lucifer_အပိုင်း၆_File_ID_ထည့်ပါ", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၆)"),
+                ("BAACAgUAAxkBAAEgusVqYH9ML8Wz_1g885Oau3MBQAZ5dgACGxkAAlnEgFQsmJuyY9nHzD0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၁)"),
+                ("BAACAgUAAxkBAAEgusdqYH-Se21TwLwEDW3wExwMEhJP9gACBxoAAlnEgFSGD6a-ep3_wj0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၂)"),
+                ("BAACAgUAAxkBAAEgus1qYH_dvXVp2vP9ZAZ1WyIDxtFyHQACWhkAAlnEgFQxHsouPRWm1D0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၃)"),
+                ("BAACAgUAAxkBAAEgutNqYIAQ1YVOgrqS4AzuR1Pe54iYKgACZhkAAlnEgFRDkdzKuTv3xT0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၄)"),
+                ("BAACAgUAAxkBAAEgutVqYICU0yb2rG2-ux8vEEgAAeO5IrgAApYZAAJZxIBULyCSzraSoIM9BA", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၅)"),
+                ("BAACAgUAAxkBAAEgutdqYIDNUzAzxQdGBqkH5AM0-gQIkAACnhkAAlnEgFSZ92iCDLoVuj0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m2:
@@ -163,7 +165,20 @@ def schedule_deletion(context, sent_msg):
 if __name__ == '__main__':
     TOKEN = "8935742099:AAF8HZBWbZLu4fh10TufidZ83TlnBHygVbE"
     application = ApplicationBuilder().token(TOKEN).build()
+    
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
+    
+    # Bot စတင်ချိန်တွင် Menu Command သတ်မှတ်ပေးရန်
+    application.job_queue
+    
     print("Bot is running with Channel Photo...")
+    
+    # ဤနေရာတွင် Menu Command ထည့်သွင်းခြင်း
+    async def post_init(application):
+        await set_bot_commands(application)
+    
+    application.post_init = post_init
+    
     application.run_polling(drop_pending_updates=True)
+    
