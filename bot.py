@@ -16,6 +16,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
+    # ပုံ့ File ID အမှန်ကို ထည့်သွင်းပြီးပါပြီ
     sent_msg = await context.bot.send_photo(
         chat_id=update.message.chat_id,
         photo="AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E",
@@ -36,7 +37,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            # 📌 ဇာတ်ကားပိုစတာနှင့် Season အချက်အလက် ဖော်ပြမည့်နေရာ
+            # 📌 ဇာတ်ကားပိုစတာနှင့် Season အချက်အလက်
             poster_msg = await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo="AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E",
@@ -51,7 +52,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             schedule_deletion(context, poster_msg)
 
-            # 🎬 ဗီဒီယို အပိုင်း (၁) မှ (၆) အထိ ဖိုင်အိုင်ဒီများကို ဤနေရာတွင် တန်းပြီးထည့်ပါ
+            # 🎬 ဗီဒီယို အပိုင်း (၁) မှ (၆) အထိ ဖိုင်အိုင်ဒီများ
             msg1 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEgubBqYFc8zCBAF0q4TGoZwX3xHLSX1AACJB4AAoXLgVRxAUNrR-eL_z0E", caption="🎬 The Flash (2014) - အပိုင်း (၁)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
             msg2 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEgullqYGxRVOwVCisP1T14wkwpTeDrAwACJR4AAoXLgVSvbOSV-SlXHD0E", caption="🎬 The Flash (2014) - အပိုင်း (၂)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
             msg3 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEguqtqYH1JKVaAc4r3m1D_TSEGpRLRrQACJh4AAoXLgVTZ9Tnit771Sz0E", caption="🎬 The Flash (2014) - အပိုင်း (၃)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
