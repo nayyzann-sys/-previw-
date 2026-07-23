@@ -10,9 +10,6 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
-# Bot စတင်ချိန်တွင် ပေါ်မည့် ပုံ (Photo URL သို့မဟုတ် Telegram File ID ထည့်ရန်)
-WELCOME_PHOTO_URL = "https://via.placeholder.com/600x400.png?text=Welcome+To+Movie+Bot"
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")],
@@ -20,14 +17,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Start နှိပ်ရင် ပုံနှင့်အတူ မက်ဆေ့ချ် ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
-    sent_msg = await update.message.reply_photo(
-        photo=WELCOME_PHOTO_URL,
-        caption=(
-            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
-        ),
+    # Start နှိပ်ရင် ခလုတ်တွေနဲ့တကွ စာသားပါ ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
+    sent_msg = await update.message.reply_text(
+        "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
+        "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
+        "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*",
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
@@ -40,12 +34,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            # ဇာတ်ကား (၁) အတွက် ပုံနှင့် အချက်အလက်များ (Season နှင့် အပိုင်း (၆) ပိုင်းစာ)
-            movie_photo_1 = "The_Flash_Poster_File_ID_သို့မဟုတ်_URL" # ဇာတ်ကားပုံ နေရာ
-            await context.bot.send_photo(
+            # ဇာတ်ကား (၁) အတွက် အချက်အလက်များ
+            await context.bot.send_message(
                 chat_id=query.message.chat_id,
-                photo=movie_photo_1,
-                caption=(
+                text=(
                     "📌 **The Flash (2014)**\n"
                     "📺 **Season:** 1\n"
                     "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
@@ -55,14 +47,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့ပေးမည် (၁၂ နာရီကြာရင် ပျက်မယ်)
+            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများ (အမှန်တကယ် အလုပ်လုပ်မယ့် Telegram Video File ID များကို ဤနေရာတွင် ထည့်ပါ)
             videos_m1 = [
-                ("အပိုင်း ၁ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၁)"),
-                ("အပိုင်း ၂ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၂)"),
-                ("အပိုင်း ၃ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၃)"),
-                ("အပိုင်း ၄ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၄)"),
-                ("အပိုင်း ၅ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၅)"),
-                ("အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 The Flash (2014) - အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m1:
@@ -92,12 +84,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            # ဇာတ်ကား အသစ် (၂) အတွက် ပုံနှင့် အချက်အလက်များ (Season နှင့် အပိုင်း (၆) ပိုင်းစာ)
-            movie_photo_2 = "New_Movie_Poster_File_ID_သို့မဟုတ်_URL" # ဇာတ်ကားပုံ နေရာ
-            await context.bot.send_photo(
+            # ဇာတ်ကား အသစ် (၂) အတွက် အချက်အလက်များ
+            await context.bot.send_message(
                 chat_id=query.message.chat_id,
-                photo=movie_photo_2,
-                caption=(
+                text=(
                     "📌 **ဇာတ်ကားအသစ် အမည်**\n"
                     "📺 **Season:** 1\n"
                     "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
@@ -107,14 +97,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများကို တစ်ခါတည်း တန်းပြီး ပို့ပေးမည် (၁၂ နာရီကြာရင် ပျက်မယ်)
+            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများ (အမှန်တကယ် အလုပ်လုပ်မယ့် Telegram Video File ID များကို ဤနေရာတွင် ထည့်ပါ)
             videos_m2 = [
-                ("ဇာတ်ကားအသစ် အပိုင်း ၁ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၁)"),
-                ("ဇာတ်ကားအသစ် အပိုင်း ၂ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၂)"),
-                ("ဇာတ်ကားအသစ် အပိုင်း ၃ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၃)"),
-                ("ဇာတ်ကားအသစ် အပိုင်း ၄ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၄)"),
-                ("ဇာတ်ကားအသစ် အပိုင်း ၅ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၅)"),
-                ("ဇာတ်ကားအသစ် အပိုင်း ၆ ရဲ့ File ID ကို ဤနေရာတွင် ထည့်ပါ", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m2:
