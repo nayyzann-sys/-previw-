@@ -10,6 +10,9 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
+# 1. Start နှိပ်ရင် ပေါ်မည့် ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID (ဥပမာ - https://example.com/poster.jpg)
+WELCOME_POSTER_URL = "https://via.placeholder.com/600x400.png?text=Welcome+Movie+Bot"
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")],
@@ -17,10 +20,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    sent_msg = await update.message.reply_text(
-        "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-        "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-        "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*",
+    # Start နှိပ်ရင် ပိုစတာပုံနှင့်အတူ ခလုတ်များ ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
+    sent_msg = await update.message.reply_photo(
+        photo=WELCOME_POSTER_URL,
+        caption=(
+            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
+            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
+            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
+        ),
         reply_markup=reply_markup,
         parse_mode="Markdown"
     )
@@ -33,19 +40,24 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            await context.bot.send_message(
+            # The Flash ဇာတ်ကား ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID
+            movie_poster_1 = "https://via.placeholder.com/600x400.png?text=The+Flash+Poster"
+            
+            # ဇာတ်ကား ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
+            await context.bot.send_photo(
                 chat_id=query.message.chat_id,
-                text=(
+                photo=movie_poster_1,
+                caption=(
                     "📌 **The Flash (2014)**\n"
                     "📺 **Season:** 1\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
-            # (မှတ်ချက် - အောက်ပါ BQAC... နေရာများတွင် သင်၏ တကယ့် Telegram ဗီဒီယို File ID များကို ထည့်ပေးပါ)
+            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများ (BQAC... နေရာတွင် တကယ့် Telegram ဗီဒီယို File ID ထည့်ရန်)
             videos_m1 = [
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
                 ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
@@ -63,6 +75,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 schedule_deletion(context, msg)
 
+            # ကျန်အပိုင်းများအတွက် ဆက်သွယ်ရန် ခလုတ်
             keyboard = [
                 [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
@@ -71,8 +84,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=query.message.chat_id,
                 text=(
-                    "🔒 **VIP အပိုင်းများ (အပိုင်း ၇ နှင့်အထက်)**\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
+                    "🔒 **ကျန်အပိုင်းများ ကြည့်ရှုရန်**\n\n"
+                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
                     "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
                     "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ ဆက်သွယ်နိုင်ပါသည် -"
                 ),
@@ -81,12 +94,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            await context.bot.send_message(
+            # ဇာတ်ကားအသစ် ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID
+            movie_poster_2 = "https://via.placeholder.com/600x400.png?text=New+Movie+Poster"
+            
+            # ဇာတ်ကားအသစ် ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
+            await context.bot.send_photo(
                 chat_id=query.message.chat_id,
-                text=(
+                photo=movie_poster_2,
+                caption=(
                     "📌 **ဇာတ်ကားအသစ် အမည်**\n"
                     "📺 **Season:** 1\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n\n"
+                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
@@ -118,8 +136,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=query.message.chat_id,
                 text=(
-                    "🔒 **VIP အပိုင်းများ (အပိုင်း ၇ နှင့်အထက်)**\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
+                    "🔒 **ကျန်အပိုင်းများ ကြည့်ရှုရန်**\n\n"
+                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
                     "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
                     "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ ဆက်သွယ်နိုင်ပါသည် -"
                 ),
