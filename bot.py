@@ -15,8 +15,8 @@ CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdt
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 6", callback_data="m1")],
-        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 9", callback_data="m2")]
+        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
+        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
