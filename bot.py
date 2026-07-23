@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 from telegram.ext import ApplicationBuilder, ContextTypes, CallbackQueryHandler, CommandHandler
 
 logging.basicConfig(
@@ -13,24 +13,33 @@ CONTACT_USERNAME = "@naywww01"
 # Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID
 CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
 
+async def set_commands(application):
+    await application.bot.set_my_commands([
+        BotCommand("start", "ဇာတ်ကားများ ကြည့်ရန် /start နှိပ်ပါ")
+    ])
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # အချိန်မရွေး /start ထပ်နှိပ်တိုင်း ဇာတ်ကားရွေးချယ်စရာ ပုံနှင့် ခလုတ်များ အသစ်ပေါ်လာစေရန်
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
         [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    sent_msg = await update.message.reply_photo(
-        photo=CHANNEL_PHOTO_ID,
-        caption=(
-            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-            "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
-        ),
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
-    )
-    schedule_start_deletion(context, sent_msg)
+    try:
+        sent_msg = await update.message.reply_photo(
+            photo=CHANNEL_PHOTO_ID,
+            caption=(
+                "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
+                "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
+                "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
+            ),
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
+        )
+        schedule_start_deletion(context, sent_msg)
+    except Exception as e:
+        print(f"Start Error: {e}")
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -53,7 +62,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # 👇 [The Flash ဇာတ်ကား - အပိုင်း ၁ မှ ၆ ထိ ဗီဒီယို File ID များကို ဤနေရာတွင် အစားထိုးထည့်ပါ]
             videos_m1 = [
                 ("BAACAgUAAxkBAAEgubBqYFc8zCBAF0q4TGoZwX3xHLSX1AACJB4AAoXLgVRxAUNrR-eL_z0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၁)"),
                 ("BAACAgUAAxkBAAEgullqYGxRVOwVCisP1T14wkwpTeDrAwACJR4AAoXLgVSvbOSV-SlXHD0E", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၂)"),
@@ -89,7 +97,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            # 👇 [Lucifer ဇာတ်ကား ပိုစတာ File ID ထည့်ရန်]
             movie_poster_2 = "AgACAgUAAxkBAAEguktqYGtKcwc5Lz0a-uvM011zR6ouQQACrBJrG-62aFXF-kV2rfK7_gEAAwIAA3cAAz0E"
             
             await context.bot.send_photo(
@@ -104,7 +111,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
-            # 👇 [Lucifer ဇာတ်ကား - အပိုင်း ၁ မှ ၆ ထိ ဗီဒီယို File ID များကို ဤနေရာတွင် အစားထိုးထည့်ပါ]
             videos_m2 = [
                 ("BAACAgUAAxkBAAEgusVqYH9ML8Wz_1g885Oau3MBQAZ5dgACGxkAAlnEgFQsmJuyY9nHzD0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၁)"),
                 ("BAACAgUAAxkBAAEgusdqYH-Se21TwLwEDW3wExwMEhJP9gACBxoAAlnEgFSGD6a-ep3_wj0E", "🎬 Lucifer (2016) - Season 1 to 9 | အပိုင်း (၂)"),
@@ -163,7 +169,15 @@ def schedule_deletion(context, sent_msg):
 if __name__ == '__main__':
     TOKEN = "8935742099:AAF8HZBWbZLu4fh10TufidZ83TlnBHygVbE"
     application = ApplicationBuilder().token(TOKEN).build()
+    
+    # /start ကို မည်သည့်အချိန်မဆို ယုံကြည်စိတ်ချစွာ လက်ခံရရှိစေရန် CommandHandler သီးသန့်ချိတ်ဆက်ပေးခြင်း
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
-    print("Bot is running with Channel Photo...")
+    
+    async def post_init(app):
+        await set_commands(app)
+        print("Bot is ready and running smoothly!")
+
+    application.post_init = post_init
+    
     application.run_polling(drop_pending_updates=True)
