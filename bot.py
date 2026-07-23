@@ -10,19 +10,19 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
-# 1. Start နှိပ်ရင် ပေါ်မည့် ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID (ဥပမာ - https://example.com/poster.jpg)
-WELCOME_POSTER_URL = "https://via.placeholder.com/600x400.png?text=Welcome+Movie+Bot"
+# Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID ကို ဤနေရာတွင် ထည့်ပါ
+CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014)", callback_data="m1")],
-        [InlineKeyboardButton("🎬 ဇာတ်ကားအသစ် အမည်", callback_data="m2")]
+        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
+        [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Start နှိပ်ရင် ပိုစတာပုံနှင့်အတူ ခလုတ်များ ပို့မည် (၁၀ မိနစ်အတွင်း မနှိပ်ရင် ပျက်မယ်)
+    # Start နှိပ်လျှင် Channel Photo နှင့်အတူ ကြိုဆိုစာသား ပို့ပေးမည်
     sent_msg = await update.message.reply_photo(
-        photo=WELCOME_POSTER_URL,
+        photo=CHANNEL_PHOTO_ID,
         caption=(
             "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
             "အောက်ပါ ဇာတ်ကားများကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
@@ -40,31 +40,27 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
-            # The Flash ဇာတ်ကား ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID
-            movie_poster_1 = "https://via.placeholder.com/600x400.png?text=The+Flash+Poster"
+            movie_poster_1 = "AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E"
             
-            # ဇာတ်ကား ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
             await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo=movie_poster_1,
                 caption=(
                     "📌 **The Flash (2014)**\n"
-                    "📺 **Season:** 1\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n\n"
+                    "📺 **Season 1 to 6**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
-            # အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုများ (BQAC... နေရာတွင် တကယ့် Telegram ဗီဒီယို File ID ထည့်ရန်)
             videos_m1 = [
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၃)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၄)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၅)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m1:
@@ -75,7 +71,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 schedule_deletion(context, msg)
 
-            # ကျန်အပိုင်းများအတွက် ဆက်သွယ်ရန် ခလုတ်
             keyboard = [
                 [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
             ]
@@ -85,7 +80,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=query.message.chat_id,
                 text=(
                     "🔒 **ကျန်အပိုင်းများ ကြည့်ရှုရန်**\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
+                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရn"
                     "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
                     "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ ဆက်သွယ်နိုင်ပါသည် -"
                 ),
@@ -94,17 +89,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            # ဇာတ်ကားအသစ် ပိုစတာပုံလင့်ခ် သို့မဟုတ် File ID
-            movie_poster_2 = "https://via.placeholder.com/600x400.png?text=New+Movie+Poster"
+            movie_poster_2 = "यहाँ_ဇာတ်ကားအသစ်_ပိုစတာ_File_ID_ထည့်ပါ"
             
-            # ဇာတ်ကားအသစ် ပိုစတာပုံနှင့် အချက်အလက်များ ပို့မည်
             await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo=movie_poster_2,
                 caption=(
                     "📌 **ဇာတ်ကားအသစ် အမည်**\n"
-                    "📺 **Season:** 1\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ ကြည့်ရှုနိုင်ပါသည်။\n\n"
+                    "📺 **Season 1 to 9**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
@@ -112,12 +104,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
             videos_m2 = [
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၁)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၂)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၃)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၄)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၅)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m2:
@@ -171,5 +163,6 @@ if __name__ == '__main__':
     application = ApplicationBuilder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
-    print("Bot is running...")
+    print("Bot is running with Channel Photo...")
     application.run_polling(drop_pending_updates=True)
+
