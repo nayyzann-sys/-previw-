@@ -1,4 +1,4 @@
-Import logging
+import logging
 import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ContextTypes, CallbackQueryHandler, CommandHandler
@@ -10,7 +10,7 @@ logging.basicConfig(
 
 CONTACT_USERNAME = "@naywww01"
 
-# Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID ကို ဤနေရာတွင် ထည့်ပါ
+# Start နှိပ်ရင် ပေါ်မည့် Channel Photo ၏ Telegram File ID
 CHANNEL_PHOTO_ID = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -20,7 +20,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Start နှိပ်လျှင် Channel Photo နှင့်အတူ ကြိုဆိုစာသား ပို့ပေးမည်
     sent_msg = await update.message.reply_photo(
         photo=CHANNEL_PHOTO_ID,
         caption=(
@@ -40,6 +39,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     try:
         if data == "m1":
+            # The Flash ပိုစတာ ID
             movie_poster_1 = "AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E"
             
             await context.bot.send_photo(
@@ -47,20 +47,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 photo=movie_poster_1,
                 caption=(
                     "📌 **The Flash (2014)**\n"
-                    "📺 **Season 1 to 6**\n\n"
+                    "📺 **Season 1 to 9**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
+            # The Flash ဗီဒီယို File ID များ (သင့်ရဲ့ တကယ့် File ID များနှင့် လိုအပ်ပါက အစားထိုးနိုင်ပါသည်)
             videos_m1 = [
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၁)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၂)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၃)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၄)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၅)"),
-                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - Season 1 to 6 | အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 The Flash (2014) - အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m1:
@@ -80,7 +81,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=query.message.chat_id,
                 text=(
                     "🔒 **ကျန်အပိုင်းများ ကြည့်ရှုရန်**\n\n"
-                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရn"
+                    "⚠️ အပိုင်း ၇ နှင့်အထက် ကျန်ရှိသော အပိုင်းများကို ဆက်လက်ကြည့်ရှုလိုပါက VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
                     "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
                     "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ ဆက်သွယ်နိုင်ပါသည် -"
                 ),
@@ -89,27 +90,29 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
         elif data == "m2":
-            movie_poster_2 = "यहाँ_ဇာတ်ကားအသစ်_ပိုစတာ_File_ID_ထည့်ပါ"
+            # Lucifer ပိုစတာ ID (ဤနေရာတွင် ပိုစတာ File ID အမှန်ထည့်ပါ)
+            movie_poster_2 = "AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E"
             
             await context.bot.send_photo(
                 chat_id=query.message.chat_id,
                 photo=movie_poster_2,
                 caption=(
-                    "📌 **ဇာတ်ကားအသစ် အမည်**\n"
-                    "📺 **Season 1 to 9**\n\n"
+                    "📌 **Lucifer (2016)**\n"
+                    "📺 **Season 1 to 6**\n\n"
                     "• ပို့ပေးသော ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
                     "• ဗီဒီယိုများ ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
                 ),
                 parse_mode="Markdown"
             )
 
+            # Lucifer ဗီဒီယို File ID များ (သင့်ရဲ့ တကယ့် File ID များနှင့် အစားထိုးထည့်ပါ)
             videos_m2 = [
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၁)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၂)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၃)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၄)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၅)"),
-                ("BQACAgUAAxkBAAI...", "🎬 ဇာတ်ကားအသစ် - Season 1 to 9 | အပိုင်း (၆)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၁)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၂)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၃)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၄)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၅)"),
+                ("BQACAgUAAxkBAAI...", "🎬 Lucifer (2016) - အပိုင်း (၆)"),
             ]
 
             for vid, cap in videos_m2:
@@ -165,3 +168,4 @@ if __name__ == '__main__':
     application.add_handler(CallbackQueryHandler(button_handler))
     print("Bot is running with Channel Photo...")
     application.run_polling(drop_pending_updates=True)
+            
