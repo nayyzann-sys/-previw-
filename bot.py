@@ -19,7 +19,6 @@ async def set_commands(application):
     ])
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # အချိန်မရွေး /start ထပ်နှိပ်တိုင်း ဇာတ်ကားရွေးချယ်စရာ ပုံနှင့် ခလုတ်များ အသစ်ပေါ်လာစေရန်
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")],
         [InlineKeyboardButton("🎬 Lucifer (2016) season 1 to 6", callback_data="m2")]
@@ -170,7 +169,6 @@ if __name__ == '__main__':
     TOKEN = "8935742099:AAF8HZBWbZLu4fh10TufidZ83TlnBHygVbE"
     application = ApplicationBuilder().token(TOKEN).build()
     
-    # /start ကို မည်သည့်အချိန်မဆို ယုံကြည်စိတ်ချစွာ လက်ခံရရှိစေရန် CommandHandler သီးသန့်ချိတ်ဆက်ပေးခြင်း
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
     
@@ -180,4 +178,6 @@ if __name__ == '__main__':
 
     application.post_init = post_init
     
-    application.run_polling(drop_pending_updates=True)
+    # ဤနေရာတွင် drop_pending_updates=False ကို သုံးထားပေးပါသည်
+    application.run_polling(drop_pending_updates=False)
+    
