@@ -8,15 +8,12 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-CONTACT_USERNAME = "@naywww01"
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # ပုံ့ File ID အမှန်ကို ထည့်သွင်းပြီးပါပြီ
     sent_msg = await context.bot.send_photo(
         chat_id=update.message.chat_id,
         photo="AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E",
@@ -67,9 +64,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             schedule_deletion(context, msg5)
             schedule_deletion(context, msg6)
 
-            # 🔒 VIP မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ်
+            # 🔒 VIP မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ် (URL ကို တိုက်ရိုက်ပြင်ဆင်ထားပါသည်)
             keyboard = [
-                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url=f"https://t.me/{CONTACT_USERNAME.replace('@', '')}")]
+                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url="https://t.me/naywww01")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -114,4 +111,4 @@ if __name__ == '__main__':
     application.add_handler(CallbackQueryHandler(button_handler))
     print("Bot is running...")
     application.run_polling(drop_pending_updates=True)
-    
+        
