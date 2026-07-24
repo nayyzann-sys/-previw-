@@ -1,114 +1,193 @@
 import logging
-import asyncio
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, ContextTypes, CallbackQueryHandler, CommandHandler
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
+from telegram.ext import ApplicationBuilder, ContextTypes, CallbackQueryHandler, MessageHandler, filters, CommandHandler
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 
+MOVIES = {
+    "1. The Flash (2014)": (
+        "Season 1 to 9", 
+        "AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E", 
+        ("BAACAgUAAxkBAAEgubBqYFc8zCBAF0q4TGoZwX3xHLSX1AACJB4AAoXLgVRxAUNrR-eL_z0E", "BAACAgUAAxkBAAEgullqYGxRVOwVCisP1T14wkwpTeDrAwACJR4AAoXLgVSvbOSV-SlXHD0E", "BAACAgUAAxkBAAEguqtqYH1JKVaAc4r3m1D_TSEGpRLRrQACJh4AAoXLgVTZ9Tnit771Sz0E", "BAACAgUAAxkBAAEguqxqYH1JCxkERguduVwRuf7HDAb2-gACKx4AAoXLgVRTok4Dly278z0E", "BAACAgUAAxkBAAEguq1qYH1JMSEgt1ePqSHRuT58A0J94wAC1yMAAlnEeFT7fXUpjRcYMD0E", "")
+    ),
+    "2. Spider-Man": (
+        "Season 1", 
+        "https://i.imgur.com/YourPoster2.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "3. Wednesday": (
+        "Season 1", 
+        "https://i.imgur.com/YourPoster3.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "4. Stranger Things": (
+        "Season 1 to 4", 
+        "https://i.imgur.com/YourPoster4.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "5. Money Heist": (
+        "Season 1 to 5", 
+        "https://i.imgur.com/YourPoster5.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "6. Loki": (
+        "Season 1 to 2", 
+        "https://i.imgur.com/YourPoster6.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "7. Batman": (
+        "Movie Collection", 
+        "https://i.imgur.com/YourPoster7.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "8. Superman": (
+        "Movie Collection", 
+        "https://i.imgur.com/YourPoster8.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "9. Avengers": (
+        "Movie Collection", 
+        "https://i.imgur.com/YourPoster9.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+    "10. Iron Man": (
+        "Movie Collection", 
+        "https://i.imgur.com/YourPoster10.jpg", 
+        ("EP1_FILE_ID", "EP2_FILE_ID", "EP3_FILE_ID", "EP4_FILE_ID", "EP5_FILE_ID", "EP6_FILE_ID")
+    ),
+}
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [InlineKeyboardButton("🎬 The Flash (2014) season 1 to 9", callback_data="m1")]
-    ]
+    reply_keyboard = [[KeyboardButton("/start")]]
+    markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
+    
+    keyboard = []
+    for title in MOVIES.keys():
+        keyboard.append([InlineKeyboardButton(f"🎬 {title}", callback_data=f"movie_{title}")])
+    
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    sent_msg = await context.bot.send_photo(
-        chat_id=update.message.chat_id,
-        photo="AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E",
-        caption=(
-            "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n"
-            "အောက်ပါ ဇာတ်ကားခလုတ်ကို နှိပ်၍ အပိုင်းများကို ရွေးချယ်နိုင်ပါသည် -\n\n"
-            "⚠️ *မှတ်ချက် - ဤမက်ဆေ့ချ်သည် ၁၀ မိနစ်ကြာပါက အလိုအလျောက် ပျက်သွားပါမည်။ လင့်ခ်ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ကြည့်ချင်ပါက /start ဖြင့် အလွယ်တကူ ပြန်ယူနိုင်ပါသည်။*"
-        ),
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
+    welcome_poster = "AgACAgUAAxkBAAEgueJqYFrWN-knIvOwmsOQ859SgDB3eQACUxVrG9u7CFdtu8B_Lb_nPQEAAwIAA3gAAz0E"
+    
+    welcome_text = (
+        "✨ **ကြိုဆိုပါတယ်ခင်ဗျာ!**\n\n"
+        "အောက်ပါ ဇာတ်ကားများထဲမှ ကြည့်လိုသည်များကို ရွေးချယ်နိုင်ပါသည် -"
     )
-    schedule_start_deletion(context, sent_msg)
+
+    try:
+        sent_msg = await update.message.reply_photo(
+            photo=welcome_poster,
+            caption=welcome_text,
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
+        )
+    except Exception:
+        sent_msg = await update.message.reply_text(
+            text=welcome_text,
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
+        )
+    
+    context.job_queue.run_once(auto_delete_message, 600, data=sent_msg.chat_id)
+
+async def auto_delete_message(context: ContextTypes.DEFAULT_TYPE):
+    job = context.job
+    try:
+        await context.bot.delete_message(chat_id=job.data, message_id=job.message.message_id)
+    except Exception:
+        pass
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
     data = query.data
+    
+    if data.startswith("movie_"):
+        movie_title = data.replace("movie_", "")
+        movie_info = MOVIES.get(movie_title, ("Season 1", "https://i.imgur.com/Default.jpg", ("", "", "", "", "", "")))
+        seasons = movie_info[0]
+        poster_url = movie_info[1]
+        ep_files = movie_info[2]
+        
+        caption_text = (
+            f"📌 **{movie_title}**\n"
+            f"📺 **Seasons:** {seasons}\n\n"
+            f"✨ အခမဲ့ အပိုင်း (၁) မှ (၆) အထိ ဗီဒီယိုဖိုင်များ -"
+        )
+        
+        try:
+            sent_msg = await context.bot.send_photo(
+                chat_id=query.message.chat_id,
+                photo=poster_url,
+                caption=caption_text,
+                parse_mode="Markdown"
+            )
+        except Exception:
+            sent_msg = await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text=caption_text,
+                parse_mode="Markdown",
+                protect_content=True
+            )
+        
+        # ဗီဒီယိုများပို့စဉ် TimeOut မဖြစ်စေရန် try...except ထည့်သွင်းထားသည်
+        for index, file_id in enumerate(ep_files, start=1):
+            if file_id and file_id != "EP1_FILE_ID":
+                try:
+                    await context.bot.send_video(
+                        chat_id=query.message.chat_id,
+                        video=file_id,
+                        caption=f"📺 **{movie_title} - အပိုင်း ({index})**",
+                        parse_mode="Markdown",
+                        protect_content=True
+                    )
+                except Exception as e:
+                    logging.error(f"Error sending video ep {index}: {e}")
+                    pass
+        
+        keyboard = [
+            [InlineKeyboardButton("🔒 အပိုင်း (၇) မှ အဆုံးထိ ကြည့်ရန် (မန်ဘာဝင်ရန် ၂၀၀၀ ကျပ် ဆက်သွယ်ရန်)", url="https://t.me/naywww01")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        try:
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text="✨ ဆက်လက်ကြည့်ရှုလိုပါက မန်ဘာဝင်ရန် ဆက်သွယ်နိုင်ပါသည်ခင်ဗျာ 👇",
+                reply_markup=reply_markup
+            )
+        except Exception:
+            pass
+        
+        if sent_msg:
+            context.job_queue.run_once(auto_delete_message_by_obj, 43200, data=(sent_msg.chat_id, sent_msg.message_id))
+
+async def auto_delete_message_by_obj(context: ContextTypes.DEFAULT_TYPE):
+    chat_id, message_id = context.job.data
     try:
-        if data == "m1":
-            # 📌 ဇာတ်ကားပိုစတာနှင့် Season အချက်အလက်
-            poster_msg = await context.bot.send_photo(
-                chat_id=query.message.chat_id,
-                photo="AgACAgUAAxkBAAEguTZqYDpsIxym5LL1imj09cHLuhpPCQACoxJrG-62aFUXfew0CMQ-UQEAAwIAA3cAAz0E",
-                caption=(
-                    "📌 **The Flash (2014)**\n"
-                    "📺 **Season:** 1 to 9 (Season ၉ ခုထိ ရှိပါတယ်)\n\n"
-                    "• အပိုင်း (၁) မှ (၆) အထိ အလကား (Free) ကြည့်ရှုနိုင်ပါသည်။\n"
-                    "• ပို့ပေးသော ပုံများနှင့် ဗီဒီယိုများသည် **(၁၂) နာရီကြာပါက** အလိုအလျောက် ပျက်သွားပါမည်။\n"
-                    "• ပျက်သွားပါက သို့မဟုတ် အချိန်မရွေး ထပ်မံကြည့်ရှုချင်ပါက **/start** ကို ပြန်နှိပ်ပြီး အသစ်ပြန်ယူ ကြည့်ရှုနိုင်ပါသည်။"
-                ),
-                parse_mode="Markdown"
-            )
-            schedule_deletion(context, poster_msg)
+        await context.bot.delete_message(chat_id=chat_id, message_id=message_id)
+    except Exception:
+        pass
 
-            # 🎬 ဗီဒီယို အပိုင်း (၁) မှ (၆) အထိ ဖိုင်အိုင်ဒီများ
-            msg1 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEgubBqYFc8zCBAF0q4TGoZwX3xHLSX1AACJB4AAoXLgVRxAUNrR-eL_z0E", caption="🎬 The Flash (2014) - အပိုင်း (၁)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-            msg2 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEgullqYGxRVOwVCisP1T14wkwpTeDrAwACJR4AAoXLgVSvbOSV-SlXHD0E", caption="🎬 The Flash (2014) - အပိုင်း (၂)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-            msg3 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEguqtqYH1JKVaAc4r3m1D_TSEGpRLRrQACJh4AAoXLgVTZ9Tnit771Sz0E", caption="🎬 The Flash (2014) - အပိုင်း (၃)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-            msg4 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEguqxqYH1JCxkERguduVwRuf7HDAb2-gACKx4AAoXLgVRTok4Dly278z0E", caption="🎬 The Flash (2014) - အပိုင်း (၄)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-            msg5 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEguq1qYH1JMSEgt1ePqSHRuT58A0J94wAC1yMAAlnEeFT7fXUpjRcYMD0E", caption="🎬 The Flash (2014) - အပိုင်း (၅)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-            msg6 = await context.bot.send_video(chat_id=query.message.chat_id, video="BAACAgUAAxkBAAEguq1qYH1JMSEgt1ePqSHRuT58A0J94wAC1yMAAlnEeFT7fXUpjRcYMD0E", caption="🎬 The Flash (2014) - အပိုင်း (၆)\n\n⚠️ ဤဗီဒီယိုသည် ၁၂ နာရီကြာပါက ပျက်သွားပါမည်။")
-
-            schedule_deletion(context, msg1)
-            schedule_deletion(context, msg2)
-            schedule_deletion(context, msg3)
-            schedule_deletion(context, msg4)
-            schedule_deletion(context, msg5)
-            schedule_deletion(context, msg6)
-
-            # 🔒 VIP မန်ဘာဝင်ရန် ဆက်သွယ်ရန် ခလုတ် (URL ကို တိုက်ရိုက်ပြင်ဆင်ထားပါသည်)
-            keyboard = [
-                [InlineKeyboardButton("💬 မန်ဘာဝင်ရန် ဆက်သွယ်ရန် (၂၀၀၀ ကျပ်)", url="https://t.me/naywww01")]
-            ]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            
-            vip_msg = await context.bot.send_message(
-                chat_id=query.message.chat_id,
-                text=(
-                    "🔒 **VIP အပိုင်းများ (အပိုင်း ၇ နှင့်အထက်)**\n\n"
-                    "⚠️ ဤ အပိုင်းများကို ကြည့်ရှုရန်အတွက် VIP မန်ဘာဝင်ရန် လိုအပ်ပါသည်။\n"
-                    "💰 မန်ဘာကြေး - **၂,၀၀၀ ကျပ်** ဖြစ်ပါသည်။\n\n"
-                    "မန်ဘာဝင်လိုပါက အောက်ပါခလုတ်ကို နှိပ်၍ Owner ထံသို့ ဆက်သွယ်နိုင်ပါသည် -"
-                ),
-                reply_markup=reply_markup,
-                parse_mode="Markdown"
-            )
-            schedule_deletion(context, vip_msg)
-            
-    except Exception as e:
-        await query.message.reply_text(f"⚠️ Error: {str(e)}")
-
-def schedule_start_deletion(context, sent_msg):
-    async def delete_start_msg():
-        await asyncio.sleep(600)  # 10 minutes
-        try:
-            await context.bot.delete_message(chat_id=sent_msg.chat_id, message_id=sent_msg.message_id)
-        except Exception:
-            pass
-    context.application.create_task(delete_start_msg())
-
-def schedule_deletion(context, sent_msg):
-    async def delete_msg():
-        await asyncio.sleep(43200)  # 12 hours
-        try:
-            await context.bot.delete_message(chat_id=sent_msg.chat_id, message_id=sent_msg.message_id)
-        except Exception:
-            pass
-    context.application.create_task(delete_msg())
+async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text
+    if text == "/start":
+        await start(update, context)
 
 if __name__ == '__main__':
     TOKEN = "8935742099:AAF8HZBWbZLu4fh10TufidZ83TlnBHygVbE"
-    application = ApplicationBuilder().token(TOKEN).build()
+    
+    # Timeout ကို စက္ကန့် ၆၀ အထိ တိုးမြှင့်ထားသည်
+    application = ApplicationBuilder().token(TOKEN).read_timeout(60).write_timeout(60).connect_timeout(60).build()
+    
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), text_handler))
+    
     print("Bot is running...")
     application.run_polling(drop_pending_updates=True)
-        
+            
